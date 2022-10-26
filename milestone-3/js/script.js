@@ -58,11 +58,11 @@ const employees =
 
 let counter = 0;  
 for( let employed of employees){
-  counter ++;
+  
   for(let k in employed){
     printObject =
     `
-    <div class="card position${counter}">
+    <div class="card position${counter}" data-position="${counter}">
       <img src="./assets/img/${employed.picture}" alt="">
       <small class="mt-4" id="name" >${employed.name}</small>
       <small id="task">${employed.task}</small>
@@ -73,6 +73,7 @@ for( let employed of employees){
     `
   };
   carousel.innerHTML+=printObject;
+  counter ++;
 }
 
 
@@ -85,36 +86,100 @@ btnPrev.addEventListener('click', function(){
 
 
 let printedCards = document.getElementsByClassName('card');
-let carouselCounter = 1;
+let carouselCounter = 0;
 let card;
 
 function carouselSlideNext(){
-  for (let i = 0; i < printedCards.length+1 ; i++){
-    
-    card = printedCards[i];
-    carouselCounter++;
-    card.className = `card position${carouselCounter}`; 
-    if(carouselCounter > printedCards.length){
-      carouselCounter= 1;
-      card.className = `card position${carouselCounter}`;
-      }
 
+  for (let i = 0; i < printedCards.length ; i++) {
+    card = printedCards[i];
+    let position = card.getAttribute('data-position');
+    position = parseInt(position) + 1;
+
+    if (position > printedCards.length - 1) {
+      position = 0;
+    }
+
+    card.className = `card position${position}`;
+    card.setAttribute('data-position', position);
+
+
+    
+    // carouselCounter = (i % printedCards.length) + 1;
+    
+    // console.log(carouselCounter % printedCards.length);
+    // console.log("log di i" , i);
+    
+    // carouselCounter++; 
+    // if(carouselCounter > printedCards.length - 1){
+    //   carouselCounter = 0;
+    //   console.log('parte da zero', `card position${carouselCounter}`);
+    //   card.className = `card position${carouselCounter}`;
+    //   } else {
+    //     console.log(carouselCounter, i, `card position${carouselCounter}`);
+    //     card.className = `card position${carouselCounter}`;
+       
+    //   }
+
+      
   }
 }
 
-// function carouselSlidePrev(){
+function carouselSlidePrev(){
 
-//   for (let i = 0; i < printedCards.length; i++){
-//     card = printedCards[i];
+  for (let i = 0; i < printedCards.length ; i++) {
+    card = printedCards[i];
+    let position = card.getAttribute('data-position');
+    position = parseInt(position) - 1;
+
+    if (position < 0) {
+      position = printedCards.length - 1;
+    }
+
+    card.className = `card position${position}`;
+    card.setAttribute('data-position', position);
+  }
+  // for (let i = 0; i < printedCards.length; i++){
+  //   card = printedCards[i];
     
-//     if(carouselCounter === 1){
-//       carouselCounter = printedCards.length;
-//       card.className = `card position${carouselCounter}`
-//       }else if(carouselCounter !== 1){
-//         carouselCounter--; 
-//         card.className = `card position${carouselCounter}`
-//       }
-//   }
-// }
+  //   if(carouselCounter === 1){
+  //     carouselCounter = printedCards.length;
+  //     card.className = `card position${carouselCounter}`
+  //     }else if(carouselCounter !== 1){
+  //       carouselCounter--; 
+  //       card.className = `card position${carouselCounter}`
+  //     }
+  // }
+}
+let isPause=false;
+const stopBtn = document.getElementById('stop-btn');
+const playBtn = document.getElementById('play-btn');
+  
+   const slide = setInterval(function(){
+    if(!isPause){
+      carouselSlideNext()
+    }
+      
+   }, 3000);
+  
+stopBtn.addEventListener('click', function(){
+  isPause=true
+  playBtn.classList.remove('hide')
+  stopBtn.classList.add('hide')
+})
+
+playBtn.addEventListener('click', function(){
+  isPause=false
+  playBtn.classList.add('hide')
+  stopBtn.classList.remove('hide')
+})
+  
+
+  
+    console.log('showedcard', showedCard)
+
+
+
+
 
 
